@@ -1,0 +1,16 @@
+.background_container {
+    position: relative;
+}
+
+.background_image { 
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: -1;
+    box-shadow: inset 0 0 0 2000px rgba(6, 73, 41, 0.5);
+}
+
