@@ -1,0 +1,21 @@
+#login_header {
+    background-color: #064727 !important;
+    color: #ffffff;
+    font-family: "DM Serif Text", serif;
+    font-weight: 400;
+}
+
+#login_body {
+    color: #000000;    
+}
+
+#signup_header {
+    background-color: #064727 !important;
+    color: #ffffff;
+    font-family: "DM Serif Text", serif;
+    font-weight: 400;
+}
+
+#signup_body {
+    color: #000000;    
+}

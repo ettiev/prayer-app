@@ -1,0 +1,17 @@
+.main_button {
+    width: 200px;
+}
+
+#button_card {
+    background-color: #d0f0d5d0;
+    font-family: "DM Serif Text", serif !important;
+    font-weight: 400;
+}
+
+#request_card {
+    background-color: #d0f0d5d0;
+}
+
+#prayer_req {
+    background-color: #ebfbee;
+}

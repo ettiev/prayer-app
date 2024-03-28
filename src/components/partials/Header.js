@@ -10,8 +10,8 @@ function Header () {
         </div>
 
         <div class="col-md-3 text-end">
-            <button type="button" class="btn btn-success me-2">Login</button>
-            <button type="button" class="btn btn-success me-2">Sign-up</button>
+            <button type="button" class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
+            <button type="button" class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#signupModal">Sign-up</button>
         </div>
         </header>
     </div>    
