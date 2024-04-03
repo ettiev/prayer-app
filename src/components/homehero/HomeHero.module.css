@@ -3,3 +3,12 @@ h1 {
     font-family: "DM Serif Text", serif;
     font-weight: 400;
 }
+
+#hero_heading {
+    margin: 50px 0px 60px 0px !important;
+}
+
+#description {
+    margin: 20px 0px 100px 0px !important;
+}
+

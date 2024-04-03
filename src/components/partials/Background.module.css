@@ -1,16 +1,39 @@
+#background {
+    height: 100vh;
+    width: 100%;
+    animation-name: background_loop;
+    animation-duration: 60s;
+    animation-iteration-count: infinite;
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: -1;
+    box-shadow: inset 0 0 0 2000px rgba(6, 73, 41, 0.3);
+}
+
+@keyframes background_loop{
+    0%{
+      background-image: url(../../images/background/church_prayer.jpg);
+    }
+    25%{
+      background-image: url(../../images/background/bible_prayer.jpg);
+    }
+    50%{
+      background-image: url(../../images/background/mountain_worship.jpg);
+    }
+    75%{
+      background-image: url(../../images/background/outside_prayer.jpg);
+    }
+    100%{
+      background-image: url(../../images/background/candles_dark.jpg);
+    }
+ }
+
 .background_container {
     position: relative;
 }
 
+
 .background_image { 
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: 100%;
-    background-repeat: no-repeat;
-    background-size: cover;
-    z-index: -1;
-    box-shadow: inset 0 0 0 2000px rgba(6, 73, 41, 0.5);
+    position: fixed;
 }
 
