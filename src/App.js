@@ -20,10 +20,10 @@ function App() {
       <Header />
       <Login />
       <SignUp />
-      {/* <HomeHero /> */}
+      <HomeHero />
       {/* <MainView /> */}
       {/* <Request /> */}
-      <Prayer />
+      {/* <Prayer /> */}
       <Footer /> 
     </div>
   );
