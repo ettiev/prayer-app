@@ -2,18 +2,15 @@ import React from "react";
 
 import style from "./modalstyles.module.css";
 
-function Login() {
-    function clickHandler() {
-        console.log("Button was clicked!")
-    };
-    
+function Login({ onLogin }) {
+        
     return <div className="modal-dialog modal-fullscreen" >
         <div id="loginModal" className="modal" tabIndex="-1">
             <div className="modal-dialog">
                 <div className="modal-content">
                     <div id={style.login_header} className="modal-header"> 
                         <h5 className="modal-title">Login</h5>
-                        <button onClick={clickHandler} type="button" className="btn-close" data-bs-dismiss="modal"></button>
+                        <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div id={style.login_body} className="modal-body">
                         <p>Enter email and password to login.</p>
@@ -27,7 +24,7 @@ function Login() {
                         </div>
                     </div>
                     <div className="modal-footer">
-                        <button type="button" className="btn btn-success">Login</button>
+                        <button onClick={ onLogin } type="button" className="btn btn-success" data-bs-dismiss="modal">Login</button>
                         <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>

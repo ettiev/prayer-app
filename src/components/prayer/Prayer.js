@@ -1,8 +1,29 @@
+import { useState } from "react";
+
 import Note from "../request/Note";
 
 import style from "./Prayer.module.css";
+import CountdownTimer from "./CountdownTimer";
 
-function Prayer() {
+function Prayer({ prayerSession }) {
+    const [pause, setPause] = useState(false);
+    const [ppButton, setPPButton] = useState("Pause Session");
+
+    
+    function pausePlaySession() {
+        if (pause) {
+            setPause(false);
+            setPPButton("Pause Session");
+        } else {
+            setPause(true)
+            setPPButton("Continue Session");
+        }
+    }
+    
+    function stopSession() {
+
+    }
+
     return <div className="container p-4 mt-4 mb-4">
         <div id={style.request_pray} className="card">
             <div className="card-body">
@@ -15,7 +36,10 @@ function Prayer() {
                                     
                                     <div className="d-flex flex-row">
                                         <p className={style.time_heading}>Current Request:</p>
-                                        <span id={style.time_current} className="badge rounded-pill text-bg-success my-3">0:00:00</span>   
+                                        <CountdownTimer 
+                                            secondsLeft="10"
+                                            pause= { pause }
+                                        />   
                                     </div>
                                     <div className="progress mb-3" role="progressbar" aria-valuemin="0" aria-valuemax="100">
                                         <div className="progress-bar bg-success" style={{ width: '25%' }}></div>
@@ -23,7 +47,10 @@ function Prayer() {
                                     
                                     <div className="d-flex flex-row">
                                         <p className={style.time_heading}>Prayer Session:</p>
-                                        <span id={style.time_session} className="badge rounded-pill text-bg-success my-3">0:00:00</span>    
+                                        <CountdownTimer 
+                                            secondsLeft="60"
+                                            pause= { pause }
+                                        />
                                     </div>
                                     
                                     <div className="progress mb-3" role="progressbar" aria-valuemin="0" aria-valuemax="100">
@@ -35,9 +62,9 @@ function Prayer() {
                         <div className="col-4">
                             <div className="card">
                                 <div className="card-body d-flex flex-column">
-                                    <button type="button " className="btn btn-secondary m-2">Next Request</button>
-                                    <button type="button" className="btn btn-secondary m-2">Pause Session</button>
-                                    <button type="button" className="btn btn-danger m-2">Stop Session</button>
+                                    <button type="button" className="btn btn-secondary m-2">Next Request</button>
+                                    <button type="button" onClick={ pausePlaySession } className="btn btn-secondary m-2">{ ppButton }</button>
+                                    <button type="button" onClick={ stopSession } className="btn btn-danger m-2">Stop Session</button>
                                 </div>
                             </div>
                         </div>

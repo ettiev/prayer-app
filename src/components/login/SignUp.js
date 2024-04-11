@@ -12,7 +12,11 @@ function SignUp() {
                         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div id={style.signup_body} className="modal-body">
-                        <p>Enter email and password to login.</p>
+                        <p>Enter username, email and password to signup.</p>
+                        <div className="input-group mb-3">
+                            <span className="input-group-text" id="inputGroup-sizing-default" style={{ width: '161px' }}>Username:</span>
+                            <input type="name" className="form-control" />
+                        </div>
                         <div className="input-group mb-3">
                             <span className="input-group-text" id="inputGroup-sizing-default" style={{ width: '161px' }}>Email:</span>
                             <input type="email" className="form-control" />
