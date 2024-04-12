@@ -3,27 +3,27 @@ import React, { useState, useEffect } from 'react';
 import style from "./CountdownTimer.module.css";
 
 function CountdownTimer({ secondsLeft, pause }) {
-  const [currentTime, setCurrentTime] = useState(new Date());
-  const [targetDate, setTargetDate] = useState(new Date(new Date().getTime() + (secondsLeft)*1000));
+  // const [currentTime, setCurrentTime] = useState(new Date());
+  // const [targetDate, setTargetDate] = useState(new Date(new Date().getTime() + (secondsLeft)*1000));
 
+  const [countDown, setCountDown] = useState(secondsLeft);
 
   
     useEffect(() => {
-    if ((currentTime <= targetDate) && (!pause)) {
+    
         const intervalId = setInterval(() => {
-            
-                setCurrentTime(new Date());
-                
+            if ((countDown > 0) && (!pause)) {
+                setCountDown(countDown - 1);
+            }    
         }, 1000);
         return () => clearInterval(intervalId);
-    }
+    
     });
 
-  const getTimeRemaining = () => {
-    const totalTime = targetDate - currentTime;
-    const seconds = Math.floor((totalTime / 1000) % 60);
-    const minutes = Math.floor((totalTime / (1000 * 60)) % 60);
-    const hours = Math.floor((totalTime / (1000 * 60 * 60)) % 24);
+  function getTimeRemaining (totalTime) {
+    const seconds = Math.floor((totalTime) % 60);
+    const minutes = Math.floor((totalTime * 60) % 60);
+    const hours = Math.floor((totalTime / (60 * 60)) % 24);
     
     return {
       hours,
@@ -32,7 +32,9 @@ function CountdownTimer({ secondsLeft, pause }) {
     };
   };
 
-  let { hours, minutes, seconds } = getTimeRemaining();
+  console.log(countDown);
+
+  let { hours, minutes, seconds } = getTimeRemaining(countDown);
   
   if (hours <= 0) {
     hours = 0
