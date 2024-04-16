@@ -32,6 +32,10 @@ function App() {
     setPageSetting("pray");  
   }
 
+  function addRequest() {
+    setPageSetting("request")
+  }
+
   let pageDisplay;
   if (loggedIn) {
     
@@ -39,11 +43,15 @@ function App() {
       pageDisplay = (<>
         <PrayerTimeModal
           onStartPrayer={ startPrayer } />
-        <MainView />
+        <MainView 
+          addRequest={ addRequest }
+        />
       </>)  
     } else if (pageSetting === "request") {
       pageDisplay = (
-        <Request />
+        <Request 
+          type="new"
+        />
       )  
     } else if (pageSetting === "pray") {
       pageDisplay = (

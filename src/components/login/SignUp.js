@@ -24,7 +24,7 @@ function SignUp() {
         setConfirmPassword(event.target.value);
     }
 
-    function submitHandler(event){
+    function signupHandler(event){
         event.preventDefault();
         const formData = {
             username: username,
@@ -42,10 +42,11 @@ function SignUp() {
             "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
+        credentials: "include",
         };
         fetch(url, options)
-        .then((response) => response.json())
-        .then((data) => console.log(data));
+        //.then((response) => response.json())
+        //.then((data) => console.log(data));
     }
 
     
@@ -57,7 +58,7 @@ function SignUp() {
                         <h5 className="modal-title">Sign Up</h5>
                         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form onSubmit={submitHandler}>
+                    <form onSubmit={signupHandler}>
                         <div id={style.signup_body} className="modal-body">
                             <p>Enter username, email and password to signup.</p>
                             <div className="input-group mb-3">

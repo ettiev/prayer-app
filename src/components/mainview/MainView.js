@@ -3,12 +3,18 @@ import PrayerRequest from "./PrayerRequest";
 
 import style from "./MainView.module.css";
 
-function MainView() {
+function MainView({ addRequest }) {
+    
+    function fillUserData() {
+
+    }
+
+    
     return <div className="container">
         <div id={style.button_card} className="card my-3 p-3">
             <div className="card-body d-flex justify-content-evenly">
                 <button type="button" className="btn btn-success btn-lg px-4" style={{ width: "180px" }} data-bs-toggle="modal" data-bs-target="#timeModal">Pray!</button>
-                <button type="button" className="btn btn-success btn-lg px-4" style={{ width: "180px" }}>Add Request</button>
+                <button type="button" className="btn btn-success btn-lg px-4" style={{ width: "180px" }} onClick={ addRequest }>Add Request</button>
             </div>
         </div>
         <div id={style.request_card} className="card my-3 p-3">
