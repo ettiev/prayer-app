@@ -36,17 +36,22 @@ function SignUp() {
 
         const url = "http://localhost:4000/new_user";
         const options = {
-        method: "POST",
-        headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-        credentials: "include",
+            method: "POST",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+            credentials: "include",
         };
         fetch(url, options)
-        //.then((response) => response.json())
-        //.then((data) => console.log(data));
+        .then((response) => {
+            console.log("Fetch response was received from server.")
+            return response.json()
+        })    
+        .then((data) => {
+            console.log(data)
+        });
     }
 
     

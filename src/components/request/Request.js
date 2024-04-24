@@ -4,7 +4,7 @@ import Note from "./Note";
 
 import style from "./Request.module.css";
 
-function Request ({ type }) {
+function Request ({ type, setPageSetting }) {
     const [request, setRequest] = useState('');
     const [note, setNote] = useState('');
 
@@ -29,9 +29,8 @@ function Request ({ type }) {
     }
 
     function requestSubmit(event) {
-                
+        event.preventDefault();        
         if (type === "new") {
-            event.preventDefault();
             const formData = {
                 request: request,
                 note: note,
@@ -42,7 +41,7 @@ function Request ({ type }) {
             const options = {
                 method: "POST",
                 headers: {
-                    Accept: "application/json",
+                    "Accept": "application/json",
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(formData),
@@ -50,8 +49,15 @@ function Request ({ type }) {
             };
 
             fetch(url, options)
-            .then((response) => response.json())
-            //.then((data) => console.log(data));
+            .then((response) => {
+                console.log("Fetch response was received from server");
+                return response.json()
+            })   
+            .then((data) => {
+                console.log(data.message)
+                setPageSetting("main")
+            })
+            .catch((err) => {console.log(err)});
         } else {
 
         }

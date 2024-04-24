@@ -3,13 +3,68 @@ import PrayerRequest from "./PrayerRequest";
 
 import style from "./MainView.module.css";
 
-function MainView({ addRequest }) {
-    
-    function fillUserData() {
+function MainView({ addRequest, pRequests, aRequests, getRequests }) {
+      
 
+    // function getAnsweredRequests() {
+    //     const url = "http://localhost:4000/answered_requests";
+    //     const options = {
+    //         method: "GET",
+    //         headers: {
+    //             "Accept": "application/json",
+    //             "Content-Type": "application/json",
+    //         },
+    //         credentials: "include",
+    //     };
+
+    //     fetch(url, options)
+    //     .then((response) => {
+    //         console.log("Fetch response was received from server");
+    //         return response.json()
+    //     })   
+    //     .then((data) => {
+    //         return data.body;
+    //     })
+    //     .catch((err) => {console.log(err)});
+    // }
+
+    
+    let prayerRequestCards 
+    if (pRequests.length > 0) {
+        prayerRequestCards= pRequests.map((request) => {
+        return <PrayerRequest 
+            key={request._id}
+            id={request._id}
+            header={request.request}
+            getRequests={ getRequests }
+        />
+        })
+    } else {
+        prayerRequestCards = (
+            <div className="m-4 py-4">
+                <h5 className="my-4">There are no requests to display.</h5>
+            </div>
+        )
     }
 
-    
+    let answeredRequestCards
+    if (aRequests.length > 0) {
+        answeredRequestCards = aRequests.map((request) => {
+            return <AnsweredRequest 
+                key={request._id}
+                id={request._id}
+                header={request.request}
+                getRequests={ getRequests }
+            />
+        })
+    } else {
+        answeredRequestCards = (
+            <div className="m-4 py-4">
+                <h5 className="my-4">There are no requests to display.</h5>
+            </div>
+        )
+    }
+
     return <div className="container">
         <div id={style.button_card} className="card my-3 p-3">
             <div className="card-body d-flex justify-content-evenly">
@@ -28,10 +83,10 @@ function MainView({ addRequest }) {
             </ul>
             <div className="tab-content" id="myTabContent" style={{ backgroundColor: "#ffffff", borderRadius: "0px 10px 10px 10px" }} >
                 <div className="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabIndex="0">
-                    <PrayerRequest />
+                    { prayerRequestCards }
                 </div>
                 <div className="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabIndex="0">
-                    <AnsweredRequest />
+                    { answeredRequestCards }
                 </div>
             </div>
         </div>    

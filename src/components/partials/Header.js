@@ -2,16 +2,18 @@ import React from 'react';
 
 import style from "./Header_Footer.module.css";
 
-function Header ({ loggedIn, onLogout }) {
+function Header ({ loggedIn, onLogout, activeUser }) {
     
-    const user = "Test User"
+    const user =  activeUser.username.toUpperCase(); 
 
     let loginDisplay;
     if (loggedIn) {
         loginDisplay = (
             <div className="col-md-3 text-end">
                 <div className="d-flex justify-content-center align-items-center">
-                    <h6 className='text-start'>User: <br /> {user}</h6>
+                    <div className= { style.username_card + " card px-4 py-1 m-1"} >
+                        <h6 className='text-start'>User: <br /> {user}</h6>    
+                    </div>
                     <button onClick={ onLogout } type="button" className="btn btn-danger mx-3">Logout</button>    
                 </div>    
             </div>
@@ -33,9 +35,7 @@ function Header ({ loggedIn, onLogout }) {
                         <img src={require("../../images/logos/prayer_app_logo.jpg")} alt="prayer app logo" width="180" height="100" />
                     </a>
                 </div>
-
                 { loginDisplay }
-            
             </header>
         </div>
     </div>    

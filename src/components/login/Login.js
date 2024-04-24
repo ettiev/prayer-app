@@ -3,7 +3,7 @@ import { useState } from "react";
 
 import style from "./modalstyles.module.css";
 
-function Login({ onLogin }) {
+function Login({ onLogin, setActiveUser }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -22,11 +22,12 @@ function Login({ onLogin }) {
             password: password,
         }
         console.log(formData);
+
         const url = "http://localhost:4000/user";
         const options = {
         method: "POST",
         headers: {
-            Accept: "application/json",
+            "Accept": "application/json",
             "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
@@ -34,10 +35,23 @@ function Login({ onLogin }) {
         };
 
         fetch(url, options)
-        .then((response) => response.json())
-        .then((data) => console.log(data));
-        onLogin();
-        
+        .then((response) => {
+            console.log("Fetch response was received from server.")
+            return response.json();
+        })
+        .then((data) => {
+            console.log(data);
+            const loginUser = {
+                _id: data.body._id,
+                username: data.body.username,
+                email: data.body.email
+            }
+            setActiveUser(loginUser);
+            onLogin();
+            
+            console.log("User was successfully logged in.")
+        })
+        .catch((err) => {console.log(err)});
     }
 
     return <div className="modal-dialog modal-fullscreen" >
