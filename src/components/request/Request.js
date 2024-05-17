@@ -7,6 +7,7 @@ import style from "./Request.module.css";
 function Request ({ type, setPageSetting }) {
     const [request, setRequest] = useState('');
     const [note, setNote] = useState('');
+    const [description, setDescription] = useState('');
 
     function handleChangeRequest(event){
         setRequest(event.target.value);
@@ -14,6 +15,10 @@ function Request ({ type, setPageSetting }) {
 
     function handleChangeNote(event){
         setNote(event.target.value);
+    }
+
+    function handleChangeDescription(event){
+        setDescription(event.target.value);
     }
 
     let prevNotes = "";
@@ -33,6 +38,7 @@ function Request ({ type, setPageSetting }) {
         if (type === "new") {
             const formData = {
                 request: request,
+                description: description,
                 note: note,
             }
             console.log(formData);
@@ -67,10 +73,14 @@ function Request ({ type, setPageSetting }) {
         <div id={style.request_edit} className="card">
             <div className="card-body">
                 <h2>Prayer Request:</h2>
-                <form onSubmit={  requestSubmit }>
+                <form onSubmit={ requestSubmit }>
                     <div className="input-group p-4">
                         <span className="input-group-text" style={{ width: '100px' }}>Request:</span>
                         <input onChange={ handleChangeRequest } value={ request } name="request" type="text" className="form-control" required/>
+                    </div>
+                    <div className="input-group p-4">
+                        <span className="input-group-text" style={{ width: '100px' }}>Description:</span>
+                        <textarea onChange={ handleChangeDescription } name="description" className="form-control" rows={4} value={ description } required></textarea>
                     </div>    
                     { noteHeading }
                     <div className="input-group pb-4 px-4">

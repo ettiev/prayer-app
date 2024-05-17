@@ -35,6 +35,7 @@ function MainView({ addRequest, pRequests, aRequests, getRequests }) {
         return <PrayerRequest 
             key={request._id}
             id={request._id}
+            description="Test description"
             header={request.request}
             getRequests={ getRequests }
         />
@@ -53,6 +54,7 @@ function MainView({ addRequest, pRequests, aRequests, getRequests }) {
             return <AnsweredRequest 
                 key={request._id}
                 id={request._id}
+                description={request.description}
                 header={request.request}
                 getRequests={ getRequests }
             />
@@ -83,10 +85,18 @@ function MainView({ addRequest, pRequests, aRequests, getRequests }) {
             </ul>
             <div className="tab-content" id="myTabContent" style={{ backgroundColor: "#ffffff", borderRadius: "0px 10px 10px 10px" }} >
                 <div className="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabIndex="0">
-                    { prayerRequestCards }
+                    <div className="container">
+                        <div className="row">
+                            { prayerRequestCards }
+                        </div>
+                    </div>
                 </div>
                 <div className="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabIndex="0">
-                    { answeredRequestCards }
+                    <div className="container">
+                        <div className="row">
+                            { answeredRequestCards }
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>    

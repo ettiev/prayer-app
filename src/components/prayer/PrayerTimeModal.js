@@ -1,9 +1,15 @@
 import React from "react";
+import { useState } from "react";
 
 import style from "./PrayerTimeModal.module.css";
 
 function PrayerTimeModal({ onStartPrayer }) {
-        
+    const [prayerTime, setPrayerTime] = useState(0);
+
+    function setTime(event) {
+        setPrayerTime(event.target.value);
+    }
+
     return <div className="modal-dialog modal-fullscreen" >
         <div id="timeModal" className="modal" tabIndex="-1">
             <div className="modal-dialog">
@@ -16,17 +22,17 @@ function PrayerTimeModal({ onStartPrayer }) {
                         <p>Enter the amount of minutes for this prayer session.</p>
                         <div className="input-group mb-3">
                             <span className="input-group-text" id="inputGroup-sizing-default" style={{ width: '100px' }}>Minutes:</span>
-                            <input type="number" className="form-control" />
+                            <input type="number" className="form-control" onChange={ setTime } value={ prayerTime }/>
                         </div>
                     </div>
                     <div className="modal-footer">
-                        <button onClick={ onStartPrayer } type="button" className="btn btn-success" data-bs-dismiss="modal">Start Prayer Session</button>
+                        <button onClick={ () => {onStartPrayer(prayerTime)} } type="button" className="btn btn-success" data-bs-dismiss="modal">Start Prayer Session</button>
                         <button type="button" className="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
                     </div>
                 </div>
             </div>
         </div>
-  </div>
+    </div>
 }
 
 export default PrayerTimeModal;

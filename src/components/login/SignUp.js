@@ -54,7 +54,6 @@ function SignUp() {
         });
     }
 
-    
     return <div className="modal-dialog modal-fullscreen" >
         <div id="signupModal" className="modal" tabIndex="-1">
             <div className="modal-dialog">
@@ -84,7 +83,7 @@ function SignUp() {
                             </div>
                         </div>
                         <div className="modal-footer">
-                            <button type="submit" className="btn btn-success">Sign Up</button>
+                            <button type="submit" className="btn btn-success" data-bs-dismiss="modal">Sign Up</button>
                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         </div>
                     </form>

@@ -49,7 +49,6 @@ function Login({ onLogin, setActiveUser }) {
             setActiveUser(loginUser);
             onLogin();
             
-            console.log("User was successfully logged in.")
         })
         .catch((err) => {console.log(err)});
     }

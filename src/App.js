@@ -17,6 +17,7 @@ import "./App.module.css";
 function App() {
   const [ loginStateConfirmed, setLoginStateConfirmed] = useState(false);
   const [ loggedIn, setLoggedIn ] = useState(false);
+  const [ prayerSessionTime, setPrayerSessionTime] = useState(0);
   const [ pageSetting, setPageSetting ] = useState("none");
   const [ activeUser, setActiveUser] = useState({
     _id: "",
@@ -30,6 +31,7 @@ function App() {
     setLoggedIn(true);
     setPageSetting("main");
     getRequests();
+    console.log("User was successfully logged in.")
   };
 
   function getRequests() {
@@ -86,8 +88,10 @@ function App() {
     setPageSetting("none");
   }
 
-  function startPrayer() {
-    setPageSetting("pray");  
+  function startPrayer(prayerTime) {
+    setPageSetting("pray");
+    setPrayerSessionTime(prayerTime);
+
   }
 
   function addRequest() {
@@ -144,13 +148,16 @@ function App() {
       pageDisplay = (
         <Request 
           type="new"
-          setPageSetting= {setPageSetting}
+          setPageSetting= { setPageSetting }
         />
       )  
     } else if (pageSetting === "pray") {
       pageDisplay = (
         <Prayer
-          prayerSession="10" />
+          prayerSession= { prayerSessionTime } 
+          prayerRequests= { prayerRequests }
+          setPageSetting= { setPageSetting }
+        />
       )  
     } else {
       pageDisplay = (
@@ -167,16 +174,14 @@ function App() {
     <div className="App">
       <Background />
       <Header
-        loggedIn={ loggedIn }
+        loggedIn= { loggedIn }
         onLogout= { logout }
         activeUser= { activeUser } />
       <Login
         onLogin= { login }
         setActiveUser= { setActiveUser } />
       <SignUp />
-      
-      { pageDisplay }
-            
+        { pageDisplay }
       <Footer /> 
     </div>
   );
