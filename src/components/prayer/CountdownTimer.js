@@ -2,21 +2,19 @@ import React, { useState, useEffect } from 'react';
 
 import style from "./CountdownTimer.module.css";
 
-function CountdownTimer({ secondsLeft, pause, endFunction }) {
+function CountdownTimer({ secondsLeft, pause, endFunction, loop }) {
   // const [currentTime, setCurrentTime] = useState(new Date());
   // const [targetDate, setTargetDate] = useState(new Date(new Date().getTime() + (secondsLeft)*1000));
 
   const [countDown, setCountDown] = useState(secondsLeft);
   const [persentage, setPersentage] = useState(100);
 
-  
-    useEffect(() => {
-    
+      useEffect(() => {
         const intervalId = setInterval(() => {
             if ((countDown > 0) && (!pause)) {
                 setCountDown(countDown - 1);
                 setPersentage(Math.floor(countDown/secondsLeft * 100));
-            }    
+            }
         }, 1000);
         return () => clearInterval(intervalId);
     
@@ -33,8 +31,6 @@ function CountdownTimer({ secondsLeft, pause, endFunction }) {
     };
   };
 
-  console.log(countDown);
-
   let { hours, minutes, seconds } = getTimeRemaining(countDown);
   
   if (hours <= 0) {
@@ -46,21 +42,27 @@ function CountdownTimer({ secondsLeft, pause, endFunction }) {
   if (seconds <= 0) {
     seconds = 0
   }
+  
   if (countDown === 0) {
     endFunction(); 
   };
+  if ((countDown <= 0) && (loop === true)) {
+    setCountDown(secondsLeft);
+    setPersentage(100);
+  }
+
   return (
-    <div>
-        <div className='row'>
+    <div style={{ width: '100%' }}>
+        <div style={{ width: '40%' }}>
           <span className={style.time_left + " badge rounded-pill text-bg-success my-3"} >
               <span>{hours.toString().padStart(2, '0')}:</span>
               <span>{minutes.toString().padStart(2, '0')}:</span>
               <span>{seconds.toString().padStart(2, '0')}</span>
           </span>
         </div>
-        <div className='row'>
-          <div className="progress mb-3" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-            <div className="progress-bar bg-success" style={{ width: persentage }}></div>
+        <div style={{ width: '100%' }}>
+          <div className="progress mb-3" role="progressbar" aria-valuemin="0" aria-valuemax="100" style={{ width: '100%' }}>
+            <div className="progress-bar bg-success" style={{ width: persentage + "%" }}></div>
           </div>
         </div>  
     </div>

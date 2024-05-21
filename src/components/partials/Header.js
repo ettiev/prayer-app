@@ -4,10 +4,9 @@ import style from "./Header_Footer.module.css";
 
 function Header ({ loggedIn, onLogout, activeUser }) {
     
-    const user =  activeUser.username.toUpperCase(); 
-
     let loginDisplay;
     if (loggedIn) {
+        const user = activeUser.username.toUpperCase();
         loginDisplay = (
             <div className="col-md-3 text-end">
                 <div className="d-flex justify-content-center align-items-center">

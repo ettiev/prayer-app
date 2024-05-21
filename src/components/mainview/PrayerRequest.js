@@ -3,7 +3,7 @@ function PrayerRequest(props) {
     const elementId = props.id.toString();
     
     function answerRequest(requestId) {
-      const url = "http://localhost:4000/answer_request/" + requestId ;
+      const url = "http://localhost:4000/answer_request/" + requestId.toString();
       const options = {
       method: "PUT",
       headers: {
@@ -27,7 +27,7 @@ function PrayerRequest(props) {
   }
 
   function deleteRequest(requestId) {
-    const url = "http://localhost:4000/delete_request/" + requestId ;
+    const url = "http://localhost:4000/delete_request/" + requestId.toString();
     const options = {
     method: "DELETE",
     headers: {
@@ -52,7 +52,7 @@ function PrayerRequest(props) {
   }
     
   return <div className="card border-secondary m-4 col-4" style={{ maxWidth: '18rem', padding: '0px' }}>
-        <div id={style.card_request_header} className="card-header">{props.header}</div>
+        <div id={style.card_request_header} className="card-header" onClick={ props.editRequest }>{props.header}</div>
         <div className="card-body">
             <h6 className="card-title">Description:</h6>
             <p className="card-text">{props.description}</p>

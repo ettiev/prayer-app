@@ -3,41 +3,18 @@ import PrayerRequest from "./PrayerRequest";
 
 import style from "./MainView.module.css";
 
-function MainView({ addRequest, pRequests, aRequests, getRequests }) {
+function MainView({ addRequest, editRequest, pRequests, aRequests, getRequests }) {
       
-
-    // function getAnsweredRequests() {
-    //     const url = "http://localhost:4000/answered_requests";
-    //     const options = {
-    //         method: "GET",
-    //         headers: {
-    //             "Accept": "application/json",
-    //             "Content-Type": "application/json",
-    //         },
-    //         credentials: "include",
-    //     };
-
-    //     fetch(url, options)
-    //     .then((response) => {
-    //         console.log("Fetch response was received from server");
-    //         return response.json()
-    //     })   
-    //     .then((data) => {
-    //         return data.body;
-    //     })
-    //     .catch((err) => {console.log(err)});
-    // }
-
-    
-    let prayerRequestCards 
+    let prayerRequestCards
     if (pRequests.length > 0) {
         prayerRequestCards= pRequests.map((request) => {
         return <PrayerRequest 
             key={request._id}
             id={request._id}
-            description="Test description"
+            description={request.description}
             header={request.request}
             getRequests={ getRequests }
+            editRequest= { () => {editRequest(request._id.toString())}}
         />
         })
     } else {
@@ -57,6 +34,7 @@ function MainView({ addRequest, pRequests, aRequests, getRequests }) {
                 description={request.description}
                 header={request.request}
                 getRequests={ getRequests }
+                editRequest= { () => {editRequest(request._id.toString())}}
             />
         })
     } else {

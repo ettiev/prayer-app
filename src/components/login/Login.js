@@ -3,7 +3,7 @@ import { useState } from "react";
 
 import style from "./modalstyles.module.css";
 
-function Login({ onLogin, setActiveUser }) {
+function Login({ onLogin, setActiveUser, setLoading }) { //
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -17,12 +17,11 @@ function Login({ onLogin, setActiveUser }) {
 
     function loginHandler(event){
         event.preventDefault();
+        setLoading(true);
         const formData = {
             email: email,
             password: password,
         }
-        console.log(formData);
-
         const url = "http://localhost:4000/user";
         const options = {
         method: "POST",
@@ -33,7 +32,6 @@ function Login({ onLogin, setActiveUser }) {
         body: JSON.stringify(formData),
         credentials: "include",
         };
-
         fetch(url, options)
         .then((response) => {
             console.log("Fetch response was received from server.")
@@ -48,7 +46,7 @@ function Login({ onLogin, setActiveUser }) {
             }
             setActiveUser(loginUser);
             onLogin();
-            
+            setLoading(false);
         })
         .catch((err) => {console.log(err)});
     }

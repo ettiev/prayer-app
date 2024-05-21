@@ -13,6 +13,7 @@ import PrayerTimeModal from './components/prayer/PrayerTimeModal';
 
 
 import "./App.module.css";
+import LoadingSpinner from './components/partials/LoadingSpinner';
 
 function App() {
   const [ loginStateConfirmed, setLoginStateConfirmed] = useState(false);
@@ -26,6 +27,8 @@ function App() {
   });
   const [prayerRequests, setPrayerRequests] = useState([]);
   const [answeredRequests, setAnsweredRequests] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [editRequestId, setEditRequestId] = useState('');
   
   function login() {
     setLoggedIn(true);
@@ -35,29 +38,32 @@ function App() {
   };
 
   function getRequests() {
-    const url = "http://localhost:4000/requests";
-    const options = {
-      method: "GET",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    };
+    setLoading(true);
+      const url = "http://localhost:4000/requests";
+      const options = {
+        method: "GET",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      };
 
-    fetch(url, options)
-    .then((response) => {
-      console.log("Fetch response was received from server");
-        return response.json()
-    })   
-    .then((data) => {
-      setPrayerRequests(data.body.pRequests);
-      setAnsweredRequests(data.body.aRequests)
-    })
-    .catch((err) => {console.log(err)});
+      fetch(url, options)
+      .then((response) => {
+        console.log("Fetch response was received from server");
+          return response.json()
+      })   
+      .then((data) => {
+        setPrayerRequests(data.body.pRequests);
+        setAnsweredRequests(data.body.aRequests)
+        setLoading(false);
+      })
+      .catch((err) => {console.log(err)});
   }
 
   function logout() {
+    setLoading(true);
     const url = "http://localhost:4000/logout";
     const options = {
       method: "DELETE",
@@ -68,7 +74,6 @@ function App() {
       body: JSON.stringify( activeUser ),
       credentials: "include",
     };
-
     fetch(url, options)
     .then((response) => {
       console.log("Fetch response was received from server");
@@ -86,50 +91,60 @@ function App() {
     })
     setLoggedIn(false);
     setPageSetting("none");
+    setLoading(false);
   }
 
   function startPrayer(prayerTime) {
     setPageSetting("pray");
     setPrayerSessionTime(prayerTime);
-
   }
 
   function addRequest() {
     setPageSetting("request")
   }
 
-  function loadPage() {
-    const url = "http://localhost:4000/login_status";
-    const options = {
-      method: "GET",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    };
-
-    fetch(url, options)
-    .then((response) => {
-      console.log("Fetch response was received from server");
-      return response.json()
-    })   
-    .then((data) => {
-      console.log(data.message)
-        if (data.body.isLoggedIn) {
-          setActiveUser(data.body.user);
-          login();
-        } else {
-          logout();
-        }
-    })
-    .catch((err) => {console.log(err)});
+  function editRequest(requestId) {
+    setPageSetting("edit");
+    setEditRequestId(requestId);
   }
+
+  function loadPage() {
+    //setLoading(true);
+    //if (loggedIn) {
+      const url = "http://localhost:4000/login_status";
+      const options = {
+        method: "GET",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      };
+
+      fetch(url, options)
+      .then((response) => {
+        console.log("Fetch response was received from server");
+        return response.json()
+      })   
+      .then((data) => {
+        console.log(data.message)
+          if (data.body.isLoggedIn === true) {
+            setActiveUser(data.body.user);
+            login();
+          } else {
+            logout();
+          }
+      })
+      .catch((err) => {console.log(err)});
+    //}  
+  }
+    
 
   if (!loginStateConfirmed) {
     loadPage();
     setLoginStateConfirmed(true);
   }
+  //setLoading(false);
 
   let pageDisplay;
   if (loggedIn) {
@@ -139,6 +154,7 @@ function App() {
           onStartPrayer={ startPrayer } />
         <MainView 
           addRequest={ addRequest }
+          editRequest={ editRequest }
           pRequests={ prayerRequests }
           aRequests={ answeredRequests }
           getRequests={ getRequests }
@@ -149,6 +165,15 @@ function App() {
         <Request 
           type="new"
           setPageSetting= { setPageSetting }
+          requestId= { '' }
+        />
+      )
+    } else if (pageSetting === "edit") {
+      pageDisplay = (
+        <Request 
+          type="edit"
+          setPageSetting= { setPageSetting }
+          requestId= { editRequestId }
         />
       )  
     } else if (pageSetting === "pray") {
@@ -170,6 +195,7 @@ function App() {
     )
   }
 
+  
   return (
     <div className="App">
       <Background />
@@ -177,10 +203,15 @@ function App() {
         loggedIn= { loggedIn }
         onLogout= { logout }
         activeUser= { activeUser } />
+      { loading && <LoadingSpinner /> }
       <Login
         onLogin= { login }
-        setActiveUser= { setActiveUser } />
-      <SignUp />
+        setActiveUser= { setActiveUser }
+        setLoading={ setLoading } 
+        />
+      <SignUp 
+        setLoading= { setLoading }
+      />
         { pageDisplay }
       <Footer /> 
     </div>

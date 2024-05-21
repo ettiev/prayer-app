@@ -1,10 +1,10 @@
 import style from "./Request.module.css"
 
-function Note() {
+function Note({ date, content }) {
     return <div className="card m-4">
         <div className="card-body">
-            <p id={ style.prev_date }>Date: 28/03/2024</p>
-            <p id={ style.prev_note }>This is a test note.</p>
+            <p id={ style.prev_date }>Date: { date }</p>
+            <p id={ style.prev_note }>{ content }</p>
         </div>
     </div>
 }

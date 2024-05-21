@@ -4,10 +4,63 @@ import Note from "./Note";
 
 import style from "./Request.module.css";
 
-function Request ({ type, setPageSetting }) {
+function Request ({ type, setPageSetting, requestId }) {
     const [request, setRequest] = useState('');
     const [note, setNote] = useState('');
     const [description, setDescription] = useState('');
+    const [prevNotesEdit, setPrevNotesEdit] = useState('')
+
+    if (type === "edit") {
+        const url = "http://localhost:4000/single_request/" + requestId.toString();
+        const options = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+        };
+
+        fetch(url, options)
+        .then((response) => {
+            console.log("Fetch response was received from server");
+            return response.json()
+        })   
+        .then((data) => {
+            const editRequest = data.body;
+            setRequest(editRequest.request);
+            setDescription(editRequest.description);
+        })
+        .catch((err) => {console.log(err)});
+
+        const urlNotes = "http://localhost:4000/notes/" + requestId.toString();
+        const optionsNotes = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+        };
+        fetch(urlNotes, optionsNotes)
+        .then((response) => {
+            console.log("Notes were received from server");
+            return response.json()
+        })   
+        .then((data) => {
+            const dataNotes = data.body;
+            var noteComponents = '';
+            noteComponents = noteComponents + dataNotes.map((note) => {
+                return (<Note 
+                    date= { note.date }
+                    content= { note.note }    
+                />)
+            })
+            setPrevNotesEdit(noteComponents);
+        })
+        .catch((err) => {console.log(err)});
+    }
+        
 
     function handleChangeRequest(event){
         setRequest(event.target.value);
@@ -19,6 +72,33 @@ function Request ({ type, setPageSetting }) {
 
     function handleChangeDescription(event){
         setDescription(event.target.value);
+    }
+
+    function addNote() {
+        const formData = {
+            request: requestId.toString(),
+            date: new Date(),
+            note: note,
+        }
+        const url = "http://localhost:4000/add_note"
+        const options = {
+            method: "POST",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+            credentials: "include",
+        };
+        fetch(url, options)
+        .then((response) => {
+            console.log("Fetch response was received from server");
+            return response.json()
+        })   
+        .then((data) => {
+            console.log(data.message)
+        })
+        .catch((err) => {console.log(err)});
     }
 
     let prevNotes = "";
@@ -41,8 +121,7 @@ function Request ({ type, setPageSetting }) {
                 description: description,
                 note: note,
             }
-            console.log(formData);
-            
+                        
             const url = "http://localhost:4000/add_request";
             const options = {
                 method: "POST",
@@ -64,9 +143,47 @@ function Request ({ type, setPageSetting }) {
                 setPageSetting("main")
             })
             .catch((err) => {console.log(err)});
-        } else {
+        } else if (type === "edit") {
+            const formData = {
+                request: request,
+                description: description,
+            }
+            if (note.length > 3) {
+                addNote();
+            }            
+            const url = "http://localhost:4000/edit_request/" + requestId.toString();
+            const options = {
+                method: "PUT",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+                credentials: "include",
+            };
+
+            fetch(url, options)
+            .then((response) => {
+                console.log("Fetch response was received from server");
+                return response.json()
+            })   
+            .then((data) => {
+                console.log(data.message)
+                setPageSetting("main")
+            })
+            .catch((err) => {console.log(err)});
 
         }
+    }
+
+    if (prevNotesEdit === "") {
+        prevNotes = (
+            <div className="m-4 py-4">
+                <h5 className="my-4">There are no requests to display.</h5>
+            </div>
+        )
+    } else {
+        prevNotes = prevNotesEdit;
     }
    
     return <div className="container p-4">

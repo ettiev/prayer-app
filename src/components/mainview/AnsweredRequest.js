@@ -4,7 +4,7 @@ function AnsweredRequest(props) {
     const elementId = props.id.toString();
     
     function deleteRequest(requestId) {
-        const url = "http://localhost:4000/delete_request/" + requestId ;
+        const url = "http://localhost:4000/delete_request/" + requestId.toString() ;
         const options = {
         method: "DELETE",
         headers: {
@@ -29,7 +29,7 @@ function AnsweredRequest(props) {
       }
     
     return <div className="card border-secondary m-4" style={{ maxWidth: '18rem', padding: '0px' }}>
-        <div id={style.card_answer_header} className="card-header">{props.header}</div>
+        <div id={style.card_answer_header} className="card-header" onClick={ props.editRequest }>{props.header}</div>
         <div className="card-body">
             <h6 className="card-title">Description:</h6>
             <p className="card-text">{props.description}</p>

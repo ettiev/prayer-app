@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import style from "./modalstyles.module.css";
 
-function SignUp() {
+function SignUp() {  //setLoading
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -25,6 +25,7 @@ function SignUp() {
     }
 
     function signupHandler(event){
+        //setLoading(true);
         event.preventDefault();
         const formData = {
             username: username,
@@ -51,6 +52,7 @@ function SignUp() {
         })    
         .then((data) => {
             console.log(data)
+            //setLoading(false);
         });
     }
 
