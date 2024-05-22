@@ -3,7 +3,7 @@ import { useState } from "react";
 
 import style from "./modalstyles.module.css";
 
-function Login({ onLogin, setActiveUser, setLoading }) { //
+function Login({ onLogin, setActiveUser, showLoading, hideLoading }) { //
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -17,7 +17,7 @@ function Login({ onLogin, setActiveUser, setLoading }) { //
 
     function loginHandler(event){
         event.preventDefault();
-        setLoading(true);
+        showLoading();
         const formData = {
             email: email,
             password: password,
@@ -46,13 +46,14 @@ function Login({ onLogin, setActiveUser, setLoading }) { //
             }
             setActiveUser(loginUser);
             onLogin();
-            setLoading(false);
+            hideLoading();
         })
         .catch((err) => {console.log(err)});
+        
     }
 
     return <div className="modal-dialog modal-fullscreen" >
-        <div id="loginModal" className="modal" tabIndex="-1">
+        <div id="loginModal" className="modal fade" tabIndex="-1">
             <div className="modal-dialog">
                 <div className="modal-content">
                     <div id={style.login_header} className="modal-header"> 

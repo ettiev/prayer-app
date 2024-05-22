@@ -5,7 +5,7 @@ import Note from "../request/Note";
 import style from "./Prayer.module.css";
 import CountdownTimer from "./CountdownTimer";
 
-function Prayer({ prayerSession, prayerRequests, setPageSetting }) {
+function Prayer({ prayerSession, prayerRequests, setPageSetting, showLoading, hideLoading }) {
     if (prayerRequests) {
         const fullSessionTime = prayerSession * 60;
         const countRequests = prayerRequests.length;
@@ -17,6 +17,39 @@ function Prayer({ prayerSession, prayerRequests, setPageSetting }) {
         const [counter, setCounter] = useState(0);
         const [notes, setNotes] = useState('');
         const [newNote, setNewNote] = useState('');
+        const [initialized, setInitialized] = useState(false);
+
+        if (!initialized) {
+            showLoading();
+            const url = "http://localhost:4000/notes/" + prayerRequests[0]._id.toString();
+            const options = {
+                method: "GET",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+            };
+            fetch(url, options)
+            .then((response) => {
+                console.log("Notes were received from server");
+                return response.json()
+            })   
+            .then((data) => {
+                const dataNotes = data.body;
+                var noteComponents = '';
+                noteComponents = dataNotes.map((note) => {
+                    return (<Note 
+                        date= { note.date }
+                        content= { note.note }    
+                    />)
+            })
+            setNotes(noteComponents);
+            hideLoading();
+            })
+            .catch((err) => {console.log(err)});
+            setInitialized(true);
+        }
         
         function pausePlaySession() {
             if (pause) {
@@ -33,6 +66,7 @@ function Prayer({ prayerSession, prayerRequests, setPageSetting }) {
             if ((counter + 1) >= countRequests ) {
                 stopSession();
             } else {
+                showLoading()
                 const url = "http://localhost:4000/notes/" + prayerRequests[counter + 1]._id.toString();
                 const options = {
                     method: "GET",
@@ -50,13 +84,14 @@ function Prayer({ prayerSession, prayerRequests, setPageSetting }) {
                 .then((data) => {
                     const dataNotes = data.body;
                     var noteComponents = '';
-                    noteComponents = noteComponents + dataNotes.map((note) => {
+                    noteComponents = dataNotes.map((note) => {
                          return (<Note 
                                 date= { note.date }
                                 content= { note.note }    
                             />)
                     })
                     setNotes(noteComponents);
+                    hideLoading();
                 })
                 .catch((err) => {console.log(err)});
                 setCurrentRequest(prayerRequests[counter + 1]);
@@ -69,6 +104,7 @@ function Prayer({ prayerSession, prayerRequests, setPageSetting }) {
         }
 
         function addNote() {
+            showLoading();
             const formData = {
                 request: currentRequest._id.toString(),
                 date: new Date(),
@@ -91,6 +127,7 @@ function Prayer({ prayerSession, prayerRequests, setPageSetting }) {
             })   
             .then((data) => {
                 console.log(data.message)
+                hideLoading();
             })
             .catch((err) => {console.log(err)});
             setNewNote('');
@@ -141,8 +178,6 @@ function Prayer({ prayerSession, prayerRequests, setPageSetting }) {
                                                 loop= { false }
                                             />
                                         </div>
-                                        
-                                        
                                     </div>
                                 </div>
                             </div>

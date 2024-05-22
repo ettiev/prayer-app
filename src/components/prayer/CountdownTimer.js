@@ -3,9 +3,6 @@ import React, { useState, useEffect } from 'react';
 import style from "./CountdownTimer.module.css";
 
 function CountdownTimer({ secondsLeft, pause, endFunction, loop }) {
-  // const [currentTime, setCurrentTime] = useState(new Date());
-  // const [targetDate, setTargetDate] = useState(new Date(new Date().getTime() + (secondsLeft)*1000));
-
   const [countDown, setCountDown] = useState(secondsLeft);
   const [persentage, setPersentage] = useState(100);
 

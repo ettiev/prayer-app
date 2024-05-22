@@ -4,63 +4,68 @@ import Note from "./Note";
 
 import style from "./Request.module.css";
 
-function Request ({ type, setPageSetting, requestId }) {
+function Request ({ type, setPageSetting, requestId, showLoading, hideLoading }) {
     const [request, setRequest] = useState('');
     const [note, setNote] = useState('');
     const [description, setDescription] = useState('');
     const [prevNotesEdit, setPrevNotesEdit] = useState('')
+    const [initialize, setInitialize] = useState(false)
 
-    if (type === "edit") {
-        const url = "http://localhost:4000/single_request/" + requestId.toString();
-        const options = {
-            method: "GET",
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
-            },
-            credentials: "include",
-        };
+    if (!initialize) {
+        if (type === "edit") {
+            showLoading()
+            const url = "http://localhost:4000/single_request/" + requestId.toString();
+            const options = {
+                method: "GET",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+            };
 
-        fetch(url, options)
-        .then((response) => {
-            console.log("Fetch response was received from server");
-            return response.json()
-        })   
-        .then((data) => {
-            const editRequest = data.body;
-            setRequest(editRequest.request);
-            setDescription(editRequest.description);
-        })
-        .catch((err) => {console.log(err)});
-
-        const urlNotes = "http://localhost:4000/notes/" + requestId.toString();
-        const optionsNotes = {
-            method: "GET",
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
-            },
-            credentials: "include",
-        };
-        fetch(urlNotes, optionsNotes)
-        .then((response) => {
-            console.log("Notes were received from server");
-            return response.json()
-        })   
-        .then((data) => {
-            const dataNotes = data.body;
-            var noteComponents = '';
-            noteComponents = noteComponents + dataNotes.map((note) => {
-                return (<Note 
-                    date= { note.date }
-                    content= { note.note }    
-                />)
+            fetch(url, options)
+            .then((response) => {
+                console.log("Fetch response was received from server");
+                return response.json()
+            })   
+            .then((data) => {
+                const editRequest = data.body;
+                setRequest(editRequest.request);
+                setDescription(editRequest.description);
             })
-            setPrevNotesEdit(noteComponents);
-        })
-        .catch((err) => {console.log(err)});
-    }
-        
+            .catch((err) => {console.log(err)});
+
+            const urlNotes = "http://localhost:4000/notes/" + requestId.toString();
+            const optionsNotes = {
+                method: "GET",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+            };
+            fetch(urlNotes, optionsNotes)
+            .then((response) => {
+                console.log("Notes were received from server");
+                return response.json()
+            })   
+            .then((data) => {
+                const dataNotes = data.body;
+                var noteComponents = '';
+                noteComponents = noteComponents + dataNotes.map((note) => {
+                    return (<Note 
+                        date= { note.date }
+                        content= { note.note }    
+                    />)
+                })
+                setPrevNotesEdit(noteComponents);
+            })
+            .catch((err) => {console.log(err)});
+        }
+        setInitialize(true);
+        hideLoading()
+    }    
 
     function handleChangeRequest(event){
         setRequest(event.target.value);
@@ -74,7 +79,12 @@ function Request ({ type, setPageSetting, requestId }) {
         setDescription(event.target.value);
     }
 
+    function closeRequest(){
+        setPageSetting("main");
+    }
+
     function addNote() {
+        showLoading();
         const formData = {
             request: requestId.toString(),
             date: new Date(),
@@ -99,23 +109,14 @@ function Request ({ type, setPageSetting, requestId }) {
             console.log(data.message)
         })
         .catch((err) => {console.log(err)});
-    }
-
-    let prevNotes = "";
-    let noteHeading = "";
-    if (type !== "new") {
-        noteHeading = (
-            <p id={style.today_note}>Today:</p>
-        )
-        prevNotes = (<>
-            <h3>Previous Notes:</h3>
-            <Note />
-        </>)
+        hideLoading();
     }
 
     function requestSubmit(event) {
-        event.preventDefault();        
+        event.preventDefault();
+               
         if (type === "new") {
+            showLoading(); 
             const formData = {
                 request: request,
                 description: description,
@@ -143,7 +144,9 @@ function Request ({ type, setPageSetting, requestId }) {
                 setPageSetting("main")
             })
             .catch((err) => {console.log(err)});
+            hideLoading();
         } else if (type === "edit") {
+            showLoading();
             const formData = {
                 request: request,
                 description: description,
@@ -172,10 +175,11 @@ function Request ({ type, setPageSetting, requestId }) {
                 setPageSetting("main")
             })
             .catch((err) => {console.log(err)});
-
+            hideLoading();
         }
     }
 
+    let prevNotes;
     if (prevNotesEdit === "") {
         prevNotes = (
             <div className="m-4 py-4">
@@ -199,16 +203,15 @@ function Request ({ type, setPageSetting, requestId }) {
                         <span className="input-group-text" style={{ width: '100px' }}>Description:</span>
                         <textarea onChange={ handleChangeDescription } name="description" className="form-control" rows={4} value={ description } required></textarea>
                     </div>    
-                    { noteHeading }
                     <div className="input-group pb-4 px-4">
                         <span className="input-group-text" style={{ width: '100px' }}>Notes: <br />(optional)</span>
                         <textarea onChange={ handleChangeNote } name="note" className="form-control" rows={8} value={ note }></textarea>
                     </div>
-                    { prevNotes }
                     <div className="text-end">
                         <button type="submit" className="btn btn-success">Save</button>
-                        <button type="button" className="btn btn-secondary m-4">Cancel</button>
+                        <button type="button" onClick={ closeRequest } className="btn btn-secondary m-4">Cancel</button>
                     </div>
+                    { prevNotes }
                 </form>    
             </div>
         </div>

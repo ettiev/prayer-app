@@ -11,7 +11,7 @@ function PrayerTimeModal({ onStartPrayer }) {
     }
 
     return <div className="modal-dialog modal-fullscreen" >
-        <div id="timeModal" className="modal" tabIndex="-1">
+        <div id="timeModal" className="modal fade" tabIndex="-1">
             <div className="modal-dialog">
                 <div className="modal-content">
                     <div id={style.time_header} className="modal-header"> 

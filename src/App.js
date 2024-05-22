@@ -10,10 +10,10 @@ import Prayer from './components/prayer/Prayer';
 import Login from './components/login/Login';
 import SignUp from './components/login/SignUp';
 import PrayerTimeModal from './components/prayer/PrayerTimeModal';
-
+import LoadingSpinner from './components/partials/LoadingSpinner';
 
 import "./App.module.css";
-import LoadingSpinner from './components/partials/LoadingSpinner';
+
 
 function App() {
   const [ loginStateConfirmed, setLoginStateConfirmed] = useState(false);
@@ -29,16 +29,24 @@ function App() {
   const [answeredRequests, setAnsweredRequests] = useState([]);
   const [loading, setLoading] = useState(false);
   const [editRequestId, setEditRequestId] = useState('');
-  
-  function login() {
-    setLoggedIn(true);
-    setPageSetting("main");
-    getRequests();
-    console.log("User was successfully logged in.")
-  };
 
-  function getRequests() {
-    setLoading(true);
+    function login() {
+      setLoggedIn(true);
+      setPageSetting("main");
+      getRequests();
+      console.log("User was successfully logged in.")
+    };
+
+    function showLoading() {
+      setLoading(true);
+    }
+
+    function hideLoading() {
+      setLoading(false);
+    }
+
+    function getRequests() {
+      showLoading();
       const url = "http://localhost:4000/requests";
       const options = {
         method: "GET",
@@ -57,13 +65,13 @@ function App() {
       .then((data) => {
         setPrayerRequests(data.body.pRequests);
         setAnsweredRequests(data.body.aRequests)
-        setLoading(false);
       })
       .catch((err) => {console.log(err)});
+      hideLoading();
   }
 
   function logout() {
-    setLoading(true);
+    showLoading();
     const url = "http://localhost:4000/logout";
     const options = {
       method: "DELETE",
@@ -91,7 +99,7 @@ function App() {
     })
     setLoggedIn(false);
     setPageSetting("none");
-    setLoading(false);
+    hideLoading();
   }
 
   function startPrayer(prayerTime) {
@@ -109,8 +117,7 @@ function App() {
   }
 
   function loadPage() {
-    //setLoading(true);
-    //if (loggedIn) {
+    showLoading();
       const url = "http://localhost:4000/login_status";
       const options = {
         method: "GET",
@@ -136,15 +143,14 @@ function App() {
           }
       })
       .catch((err) => {console.log(err)});
-    //}  
+    hideLoading();  
   }
-    
-
+  
   if (!loginStateConfirmed) {
     loadPage();
     setLoginStateConfirmed(true);
   }
-  //setLoading(false);
+  
 
   let pageDisplay;
   if (loggedIn) {
@@ -158,6 +164,8 @@ function App() {
           pRequests={ prayerRequests }
           aRequests={ answeredRequests }
           getRequests={ getRequests }
+          showLoading={ showLoading }
+          hideLoading={ hideLoading }
         />
       </>)  
     } else if (pageSetting === "request") {
@@ -166,6 +174,8 @@ function App() {
           type="new"
           setPageSetting= { setPageSetting }
           requestId= { '' }
+          showLoading={ showLoading }
+          hideLoading={ hideLoading }
         />
       )
     } else if (pageSetting === "edit") {
@@ -174,6 +184,8 @@ function App() {
           type="edit"
           setPageSetting= { setPageSetting }
           requestId= { editRequestId }
+          showLoading={ showLoading }
+          hideLoading={ hideLoading }
         />
       )  
     } else if (pageSetting === "pray") {
@@ -182,6 +194,8 @@ function App() {
           prayerSession= { prayerSessionTime } 
           prayerRequests= { prayerRequests }
           setPageSetting= { setPageSetting }
+          showLoading={ showLoading }
+          hideLoading={ hideLoading }
         />
       )  
     } else {
@@ -194,23 +208,24 @@ function App() {
       <HomeHero />
     )
   }
-
-  
+ 
   return (
     <div className="App">
       <Background />
+      { loading ? <LoadingSpinner /> : ''}
       <Header
         loggedIn= { loggedIn }
         onLogout= { logout }
         activeUser= { activeUser } />
-      { loading && <LoadingSpinner /> }
       <Login
         onLogin= { login }
         setActiveUser= { setActiveUser }
-        setLoading={ setLoading } 
+        showLoading={ showLoading }
+        hideLoading={ hideLoading } 
         />
       <SignUp 
-        setLoading= { setLoading }
+        showLoading={ showLoading }
+        hideLoading={ hideLoading }
       />
         { pageDisplay }
       <Footer /> 

@@ -3,7 +3,7 @@ import PrayerRequest from "./PrayerRequest";
 
 import style from "./MainView.module.css";
 
-function MainView({ addRequest, editRequest, pRequests, aRequests, getRequests }) {
+function MainView({ addRequest, editRequest, pRequests, aRequests, getRequests, showLoading, hideLoading }) {
       
     let prayerRequestCards
     if (pRequests.length > 0) {
@@ -15,6 +15,8 @@ function MainView({ addRequest, editRequest, pRequests, aRequests, getRequests }
             header={request.request}
             getRequests={ getRequests }
             editRequest= { () => {editRequest(request._id.toString())}}
+            showLoading={ showLoading }
+            hideLoading={ hideLoading }
         />
         })
     } else {
@@ -35,6 +37,8 @@ function MainView({ addRequest, editRequest, pRequests, aRequests, getRequests }
                 header={request.request}
                 getRequests={ getRequests }
                 editRequest= { () => {editRequest(request._id.toString())}}
+                showLoading={ showLoading }
+                hideLoading={ hideLoading }
             />
         })
     } else {

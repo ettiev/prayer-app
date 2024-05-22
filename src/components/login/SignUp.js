@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import style from "./modalstyles.module.css";
 
-function SignUp() {  //setLoading
+function SignUp({ showLoading, hideLoading }) { 
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -25,8 +25,8 @@ function SignUp() {  //setLoading
     }
 
     function signupHandler(event){
-        //setLoading(true);
         event.preventDefault();
+        showLoading();
         const formData = {
             username: username,
             email: email,
@@ -52,12 +52,13 @@ function SignUp() {  //setLoading
         })    
         .then((data) => {
             console.log(data)
-            //setLoading(false);
+            hideLoading();
         });
+       
     }
 
     return <div className="modal-dialog modal-fullscreen" >
-        <div id="signupModal" className="modal" tabIndex="-1">
+        <div id="signupModal" className="modal fade" tabIndex="-1">
             <div className="modal-dialog">
                 <div className="modal-content">
                     <div id={style.signup_header} className="modal-header"> 

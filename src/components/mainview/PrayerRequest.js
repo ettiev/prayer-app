@@ -3,6 +3,7 @@ function PrayerRequest(props) {
     const elementId = props.id.toString();
     
     function answerRequest(requestId) {
+      props.showLoading();
       const url = "http://localhost:4000/answer_request/" + requestId.toString();
       const options = {
       method: "PUT",
@@ -20,6 +21,7 @@ function PrayerRequest(props) {
     })   
     .then((data) => {
       console.log(data.message)
+      props.hideLoading();
     })    
     .catch((err) => {
       console.log(err)
@@ -27,6 +29,7 @@ function PrayerRequest(props) {
   }
 
   function deleteRequest(requestId) {
+    props.showLoading();
     const url = "http://localhost:4000/delete_request/" + requestId.toString();
     const options = {
     method: "DELETE",
@@ -45,6 +48,7 @@ function PrayerRequest(props) {
     .then((data) => {
         console.log(data.message);
         props.getRequests();
+        props.hideLoading();
     })    
     .catch((err) => {
         console.log(err)

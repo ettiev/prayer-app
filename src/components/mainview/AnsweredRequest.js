@@ -4,6 +4,7 @@ function AnsweredRequest(props) {
     const elementId = props.id.toString();
     
     function deleteRequest(requestId) {
+        props.showLoading();
         const url = "http://localhost:4000/delete_request/" + requestId.toString() ;
         const options = {
         method: "DELETE",
@@ -22,6 +23,7 @@ function AnsweredRequest(props) {
         .then((data) => {
             console.log(data.message)
             props.getRequests();
+            props.hideLoading();
         })    
         .catch((err) => {
             console.log(err)
